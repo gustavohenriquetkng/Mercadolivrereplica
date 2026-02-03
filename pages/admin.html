@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - EPIs</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="login-modal" style="display: flex;">
+        <div class="modal-content" style="max-width: 400px;">
+            <h2 class="modal-title" style="text-align: center; margin-bottom: 30px;">Login Administrativo</h2>
+            <form onsubmit="fazerLogin(event)">
+                <div class="form-group">
+                    <label>Usuário:</label>
+                    <input type="text" id="login-user" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" id="login-pass" required>
+                </div>
+                <button type="submit" class="btn-submit" style="width: 100%;">Entrar</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px; font-size: 14px; color: #666;">
+                Usuário: <strong>admin</strong> | Senha: <strong>1234</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- PAINEL ADMINISTRATIVO -->
+    <div class="admin-container" id="admin-panel" style="display: none;">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <h3>Painel Admin</h3>
+            <ul class="admin-menu">
+                <li><a href="#" onclick="mostrarSecao('dashboard')" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="mostrarSecao('produtos')">Gerenciar EPIs</a></li>
+                <li><a href="#" onclick="mostrarSecao('categorias')">Categorias</a></li>
+                <li><a href="#" onclick="mostrarSecao('normas')">Normas</a></li>
+                <li><a href="#" onclick="mostrarSecao('relatorios')">Relatórios</a></li>
+                <li><a href="#" onclick="fazerLogout()">Sair</a></li>
+            </ul>
+        </aside>
+
+        <!-- CONTEÚDO -->
+        <div class="admin-content">
+
+            <!-- DASHBOARD -->
+            <div class="admin-section active" id="dashboard">
+                <h2 style="color: #0A7C2F; margin-bottom: 30px;">Dashboard</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="color: #0A7C2F; margin-bottom: 10px;">Total de EPIs</h3>
+                        <p style="font-size: 32px; font-weight: bold; color: #38B000;" id="total-epis">10</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="color: #0A7C2F; margin-bottom: 10px;">Total em Estoque</h3>
+                        <p style="font-size: 32px; font-weight: bold; color: #38B000;" id="total-estoque">785</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="color: #0A7C2F; margin-bottom: 10px;">Categorias</h3>
+                        <p style="font-size: 32px; font-weight: bold; color: #38B000;" id="total-categorias">8</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="color: #0A7C2F; margin-bottom: 10px;">Normas Ativas</h3>
+                        <p style="font-size: 32px; font-weight: bold; color: #38B000;" id="total-normas">4</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GERENCIAR EPIs -->
+            <div class="admin-section" id="produtos">
+                <h2 style="color: #0A7C2F; margin-bottom: 30px;">Gerenciar EPIs</h2>
+
+                <button class="btn-submit" onclick="abrirFormularioEpi()" style="margin-bottom: 20px;">
+                    <i class="fa-solid fa-plus"></i> Adicionar Novo EPI
+                </button>
+
+                <div id="form-epi" class="admin-form" style="display: none; margin-bottom: 30px;">
+                    <h3 style="color: #0A7C2F; margin-bottom: 20px;">Formulário de EPI</h3>
+                    <form onsubmit="salvarEpi(event)">
+                        <div class="form-group">
+                            <label>Nome do EPI:</label>
+                            <input type="text" id="epi-nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição:</label>
+                            <textarea id="epi-descricao" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria:</label>
+                            <select id="epi-categoria" required>
+                                <option>Proteção da Cabeça</option>
+                                <option>Proteção Auditiva</option>
+                                <option>Proteção Respiratória</option>
+                                <option>Proteção Visual</option>
+                                <option>Proteção das Mãos</option>
+                                <option>Proteção dos Pés</option>
+                                <option>Proteção contra Quedas</option>
+                                <option>Proteção Corporal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Risco:</label>
+                            <input type="text" id="epi-risco" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Norma Regulamentadora:</label>
+                            <select id="epi-norma" required>
+                                <option>NR6</option>
+                                <option>NR9</option>
+                                <option>NR15</option>
+                                <option>NR35</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Estoque:</label>
+                            <input type="number" id="epi-estoque" required>
+                        </div>
+                        <div class="form-group">
+                            <label>URL da Imagem:</label>
+                            <input type="url" id="epi-imagem" required>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-submit">Salvar EPI</button>
+                            <button type="button" class="btn-submit" style="background-color: #999;" onclick="fecharFormularioEpi()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Risco</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="epis-table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CATEGORIAS -->
+            <div class="admin-section" id="categorias">
+                <h2 style="color: #0A7C2F; margin-bottom: 30px;">Gerenciar Categorias</h2>
+
+                <div class="admin-form" style="margin-bottom: 30px;">
+                    <h3 style="color: #0A7C2F; margin-bottom: 20px;">Adicionar Categoria</h3>
+                    <form onsubmit="adicionarCategoria(event)">
+                        <div class="form-group">
+                            <label>Nome da Categoria:</label>
+                            <input type="text" id="categoria-nome" required>
+                        </div>
+                        <button type="submit" class="btn-submit">Adicionar</button>
+                    </form>
+                </div>
+
+                <h3 style="color: #0A7C2F; margin-bottom: 15px;">Categorias Existentes:</h3>
+                <div id="categorias-list" style="display: grid; gap: 10px;">
+                </div>
+            </div>
+
+            <!-- NORMAS -->
+            <div class="admin-section" id="normas">
+                <h2 style="color: #0A7C2F; margin-bottom: 30px;">Gerenciar Normas Regulamentadoras</h2>
+
+                <div class="admin-form" style="margin-bottom: 30px;">
+                    <h3 style="color: #0A7C2F; margin-bottom: 20px;">Adicionar Norma</h3>
+                    <form onsubmit="adicionarNorma(event)">
+                        <div class="form-group">
+                            <label>Código (ex: NR6):</label>
+                            <input type="text" id="norma-codigo" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Título:</label>
+                            <input type="text" id="norma-titulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Conceito:</label>
+                            <textarea id="norma-conceito" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Adicionar</button>
+                    </form>
+                </div>
+
+                <h3 style="color: #0A7C2F; margin-bottom: 15px;">Normas Existentes:</h3>
+                <div id="normas-list" style="display: grid; gap: 15px;">
+                </div>
+            </div>
+
+            <!-- RELATÓRIOS -->
+            <div class="admin-section" id="relatorios">
+                <h2 style="color: #0A7C2F; margin-bottom: 30px;">Relatórios</h2>
+
+                <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="color: #0A7C2F; margin-bottom: 15px;">Relatório de Estoque</h3>
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>EPI</th>
+                                <th>Categoria</th>
+                                <th>Estoque</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="relatorio-estoque">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="background: white; padding: 20px; border-radius: 8px;">
+                    <h3 style="color: #0A7C2F; margin-bottom: 15px;">Resumo por Categoria</h3>
+                    <div id="relatorio-categorias"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../scripts.js"></script>
+    <script>
+        // SISTEMA DE LOGIN
+        function fazerLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById("login-user").value;
+            const pass = document.getElementById("login-pass").value;
+
+            if (user === "admin" && pass === "1234") {
+                localStorage.setItem("admin-login", "true");
+                document.getElementById("login-modal").style.display = "none";
+                document.getElementById("admin-panel").style.display = "grid";
+                carregarDashboard();
+                carregarEpis();
+                carregarCategorias();
+                carregarNormas();
+                carregarRelatorios();
+            } else {
+                alert("Usuário ou senha incorretos!");
+            }
+        }
+
+        function fazerLogout() {
+            localStorage.removeItem("admin-login");
+            location.reload();
+        }
+
+        // VERIFICAR LOGIN
+        window.addEventListener("DOMContentLoaded", () => {
+            const logado = localStorage.getItem("admin-login");
+            if (logado === "true") {
+                document.getElementById("login-modal").style.display = "none";
+                document.getElementById("admin-panel").style.display = "grid";
+                carregarDashboard();
+                carregarEpis();
+                carregarCategorias();
+                carregarNormas();
+                carregarRelatorios();
+            }
+        });
+
+        // MOSTRAR SEÇÃO
+        function mostrarSecao(secao) {
+            document.querySelectorAll(".admin-section").forEach(s => s.classList.remove("active"));
+            document.getElementById(secao).classList.add("active");
+
+            document.querySelectorAll(".admin-menu a").forEach(a => a.classList.remove("active"));
+            event.target.classList.add("active");
+        }
+
+        // DASHBOARD
+        function carregarDashboard() {
+            document.getElementById("total-epis").textContent = epis.length;
+            document.getElementById("total-estoque").textContent = epis.reduce((sum, e) => sum + e.estoque, 0);
+            document.getElementById("total-categorias").textContent = categorias.length;
+            document.getElementById("total-normas").textContent = normas.length;
+        }
+
+        // EPIs
+        function abrirFormularioEpi() {
+            document.getElementById("form-epi").style.display = "block";
+        }
+
+        function fecharFormularioEpi() {
+            document.getElementById("form-epi").style.display = "none";
+            document.getElementById("form-epi").reset();
+        }
+
+        function salvarEpi(event) {
+            event.preventDefault();
+
+            const novoEpi = {
+                id: epis.length + 1,
+                nome: document.getElementById("epi-nome").value,
+                descricao: document.getElementById("epi-descricao").value,
+                categoria: document.getElementById("epi-categoria").value,
+                risco: document.getElementById("epi-risco").value,
+                norma: document.getElementById("epi-norma").value,
+                imagem: document.getElementById("epi-imagem").value,
+                estoque: parseInt(document.getElementById("epi-estoque").value),
+                detalhes: "Detalhes técnicos do EPI",
+                uso: "Instruções de uso"
+            };
+
+            epis.push(novoEpi);
+            localStorage.setItem("epis-custom", JSON.stringify(epis));
+            fecharFormularioEpi();
+            carregarEpis();
+            carregarDashboard();
+            mostrarNotificacao("EPI adicionado com sucesso!");
+        }
+
+        function carregarEpis() {
+            const tbody = document.getElementById("epis-table-body");
+            tbody.innerHTML = "";
+
+            epis.forEach(epi => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${epi.id}</td>
+                    <td>${epi.nome}</td>
+                    <td>${epi.categoria}</td>
+                    <td>${epi.risco}</td>
+                    <td>${epi.estoque}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editarEpi(${epi.id})">Editar</button>
+                        <button class="btn-delete" onclick="deletarEpi(${epi.id})">Deletar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function editarEpi(id) {
+            alert("Funcionalidade de edição em desenvolvimento");
+        }
+
+        function deletarEpi(id) {
+            if (confirm("Tem certeza que deseja deletar este EPI?")) {
+                const index = epis.findIndex(e => e.id === id);
+                if (index > -1) {
+                    epis.splice(index, 1);
+                    carregarEpis();
+                    carregarDashboard();
+                    mostrarNotificacao("EPI deletado com sucesso!");
+                }
+            }
+        }
+
+        // CATEGORIAS
+        function carregarCategorias() {
+            const list = document.getElementById("categorias-list");
+            list.innerHTML = "";
+
+            categorias.forEach((cat, index) => {
+                const div = document.createElement("div");
+                div.style.cssText = "background: white; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;";
+                div.innerHTML = `
+                    <span>${cat}</span>
+                    <button class="btn-delete" onclick="deletarCategoria(${index})">Deletar</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function adicionarCategoria(event) {
+            event.preventDefault();
+            const nome = document.getElementById("categoria-nome").value;
+
+            if (nome && !categorias.includes(nome)) {
+                categorias.push(nome);
+                document.getElementById("categoria-nome").value = "";
+                carregarCategorias();
+                mostrarNotificacao("Categoria adicionada com sucesso!");
+            }
+        }
+
+        function deletarCategoria(index) {
+            if (confirm("Tem certeza?")) {
+                categorias.splice(index, 1);
+                carregarCategorias();
+            }
+        }
+
+        // NORMAS
+        function carregarNormas() {
+            const list = document.getElementById("normas-list");
+            list.innerHTML = "";
+
+            normas.forEach(norma => {
+                const div = document.createElement("div");
+                div.style.cssText = "background: white; padding: 15px; border-radius: 5px; border-left: 5px solid #0A7C2F;";
+                div.innerHTML = `
+                    <h4 style="color: #0A7C2F; margin-bottom: 8px;">${norma.codigo} - ${norma.titulo}</h4>
+                    <p style="font-size: 14px; color: #666;">${norma.conceito}</p>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function adicionarNorma(event) {
+            event.preventDefault();
+
+            const novaNorma = {
+                codigo: document.getElementById("norma-codigo").value,
+                titulo: document.getElementById("norma-titulo").value,
+                conceito: document.getElementById("norma-conceito").value,
+                aplicacao: "Aplicação padrão",
+                relacao: "Relação com EPIs"
+            };
+
+            normas.push(novaNorma);
+            document.getElementById("norma-codigo").value = "";
+            document.getElementById("norma-titulo").value = "";
+            document.getElementById("norma-conceito").value = "";
+            carregarNormas();
+            mostrarNotificacao("Norma adicionada com sucesso!");
+        }
+
+        // RELATÓRIOS
+        function carregarRelatorios() {
+            // Relatório de Estoque
+            const tbody = document.getElementById("relatorio-estoque");
+            tbody.innerHTML = "";
+
+            epis.forEach(epi => {
+                const status = epi.estoque > 20 ? "✅ Adequado" : epi.estoque > 5 ? "⚠️ Baixo" : "❌ Crítico";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${epi.nome}</td>
+                    <td>${epi.categoria}</td>
+                    <td>${epi.estoque}</td>
+                    <td>${status}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Resumo por Categoria
+            const resumo = document.getElementById("relatorio-categorias");
+            resumo.innerHTML = "";
+
+            categorias.forEach(cat => {
+                const total = epis.filter(e => e.categoria === cat).length;
+                const estoque = epis.filter(e => e.categoria === cat).reduce((sum, e) => sum + e.estoque, 0);
+
+                const div = document.createElement("div");
+                div.style.cssText = "background: #F5F5F5; padding: 15px; border-radius: 5px; margin-bottom: 10px;";
+                div.innerHTML = `
+                    <strong>${cat}</strong><br>
+                    EPIs: ${total} | Estoque Total: ${estoque}
+                `;
+                resumo.appendChild(div);
+            });
+        }
+    </script>
+
+</body>
+
+</html>

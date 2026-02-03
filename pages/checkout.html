@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Entrega de EPIs</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="menu-icon" id="menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <aside class="sidebar" id="sidebar">
+                <ul>
+                    <li><a href="../index.html">Voltar ao Início</a></li>
+                    <li><a href="carrinho.html">Carrinho</a></li>
+                </ul>
+            </aside>
+
+            <div style="flex: 1; text-align: center; color: white; font-size: 20px; font-weight: bold;">
+                📋 Checkout - Entrega de EPIs
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <section class="main" style="min-height: 70vh;">
+        <div class="container">
+            <h2 class="section-title">Simulação de Entrega de EPIs ao Trabalhador</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+
+                <!-- FORMULÁRIO -->
+                <div class="admin-form">
+                    <h3 style="color: #0A7C2F; margin-bottom: 20px;">Dados do Trabalhador</h3>
+
+                    <form onsubmit="finalizarEntrega(event)">
+                        <div class="form-group">
+                            <label>Nome do Trabalhador:</label>
+                            <input type="text" id="trabalhador-nome" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Função/Cargo:</label>
+                            <input type="text" id="trabalhador-funcao" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Setor/Departamento:</label>
+                            <input type="text" id="trabalhador-setor" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Data de Entrega:</label>
+                            <input type="date" id="entrega-data" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Observações:</label>
+                            <textarea id="entrega-obs" placeholder="Observações adicionais..."></textarea>
+                        </div>
+
+                        <h3 style="color: #0A7C2F; margin: 25px 0 15px 0;">EPIs a Entregar</h3>
+
+                        <div id="epis-lista" style="background: #F5F5F5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn-submit" style="flex: 1;">
+                                Confirmar Entrega
+                            </button>
+                            <button type="button" class="btn-submit" style="flex: 1; background-color: #25D366;" onclick="enviarViaWhatsApp()">
+                                <i class="fa-brands fa-whatsapp"></i> Enviar via WhatsApp
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RESUMO -->
+                <div>
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="color: #0A7C2F; margin-bottom: 20px;">Resumo da Entrega</h3>
+
+                        <div style="border-bottom: 1px solid #DDD; padding-bottom: 15px; margin-bottom: 15px;">
+                            <p style="font-size: 14px; color: #666; margin-bottom: 8px;">
+                                <strong>Quantidade de EPIs:</strong><br>
+                                <span id="resumo-quantidade" style="font-size: 18px; color: #0A7C2F; font-weight: bold;">0</span>
+                            </p>
+                        </div>
+
+                        <div style="border-bottom: 1px solid #DDD; padding-bottom: 15px; margin-bottom: 15px;">
+                            <p style="font-size: 14px; color: #666; margin-bottom: 8px;">
+                                <strong>Valor Total:</strong><br>
+                                <span id="resumo-total" style="font-size: 18px; color: #0A7C2F; font-weight: bold;">R$ 0,00</span>
+                            </p>
+                        </div>
+
+                        <div style="background: #D8F3DC; padding: 15px; border-radius: 5px; border-left: 4px solid #0A7C2F;">
+                            <p style="font-size: 13px; color: #0A7C2F;">
+                                <strong>ℹ️ Informação:</strong><br>
+                                Esta é uma simulação educacional de entrega de EPIs. Os dados serão armazenados localmente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- MODAL DE CONFIRMAÇÃO -->
+    <div class="modal" id="confirmacao-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="modal-close" onclick="fecharConfirmacao()">&times;</span>
+            <h2 class="modal-title" style="color: #0A7C2F; margin-bottom: 20px;">✅ Entrega Confirmada!</h2>
+
+            <div id="confirmacao-conteudo"></div>
+
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn-submit" style="flex: 1;" onclick="imprimirFicha()">
+                    <i class="fa-solid fa-print"></i> Imprimir Ficha
+                </button>
+                <button class="btn-submit" style="flex: 1;" onclick="voltarAoInicio()">
+                    Voltar ao Início
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="copyright">
+        © 2025 Plataforma Educacional de EPIs — Todos os direitos reservados.
+    </div>
+
+    <script src="../scripts.js"></script>
+    <script>
+        function carregarResumo() {
+            const quantidade = carrinho.length;
+            const total = calcularTotalCarrinho();
+
+            document.getElementById("resumo-quantidade").textContent = quantidade;
+            document.getElementById("resumo-total").textContent = formatarPreco(total);
+
+            // Listar EPIs
+            const lista = document.getElementById("epis-lista");
+            lista.innerHTML = "";
+
+            if (carrinho.length === 0) {
+                lista.innerHTML = '<p style="color: #999; text-align: center;">Nenhum EPI no carrinho</p>';
+            } else {
+                carrinho.forEach(item => {
+                    const div = document.createElement("div");
+                    div.style.cssText = "background: white; padding: 10px; border-radius: 4px; margin-bottom: 8px; display: flex; justify-content: space-between;";
+                    div.innerHTML = `
+                        <span>${item.nome}</span>
+                        <span style="font-weight: bold;">${item.quantidade}x</span>
+                    `;
+                    lista.appendChild(div);
+                });
+            }
+        }
+
+        function finalizarEntrega(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById("trabalhador-nome").value;
+            const funcao = document.getElementById("trabalhador-funcao").value;
+            const setor = document.getElementById("trabalhador-setor").value;
+            const data = document.getElementById("entrega-data").value;
+
+            if (carrinho.length === 0) {
+                alert("Adicione EPIs ao carrinho antes de finalizar!");
+                return;
+            }
+
+            // Salvar entrega
+            const entrega = {
+                id: Date.now(),
+                nome,
+                funcao,
+                setor,
+                data,
+                epis: [...carrinho],
+                total: calcularTotalCarrinho(),
+                dataRegistro: new Date().toLocaleString("pt-BR")
+            };
+
+            let entregas = JSON.parse(localStorage.getItem("entregas") || "[]");
+            entregas.push(entrega);
+            localStorage.setItem("entregas", JSON.stringify(entregas));
+
+            // Mostrar confirmação
+            mostrarConfirmacao(entrega);
+        }
+
+        function mostrarConfirmacao(entrega) {
+            const conteudo = document.getElementById("confirmacao-conteudo");
+            const epis = entrega.epis.map(e => `<li>${e.nome} (${e.quantidade}x)</li>`).join("");
+
+            conteudo.innerHTML = `
+                <div style="background: #F5F5F5; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <p><strong>Trabalhador:</strong> ${entrega.nome}</p>
+                    <p><strong>Função:</strong> ${entrega.funcao}</p>
+                    <p><strong>Setor:</strong> ${entrega.setor}</p>
+                    <p><strong>Data de Entrega:</strong> ${new Date(entrega.data).toLocaleDateString("pt-BR")}</p>
+                </div>
+
+                <div style="background: #D8F3DC; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <h4 style="color: #0A7C2F; margin-bottom: 10px;">EPIs Entregues:</h4>
+                    <ul style="margin-left: 20px; color: #0A7C2F;">
+                        ${epis}
+                    </ul>
+                </div>
+
+                <div style="text-align: right; padding: 15px; background: #F5F5F5; border-radius: 5px;">
+                    <p style="margin-bottom: 5px;">Total: <strong style="font-size: 18px; color: #0A7C2F;">${formatarPreco(entrega.total)}</strong></p>
+                    <p style="font-size: 12px; color: #999;">Registrado em: ${entrega.dataRegistro}</p>
+                </div>
+            `;
+
+            document.getElementById("confirmacao-modal").classList.add("active");
+
+            // Limpar carrinho
+            carrinho = [];
+            salvarCarrinho();
+        }
+
+        function fecharConfirmacao() {
+            document.getElementById("confirmacao-modal").classList.remove("active");
+        }
+
+        function imprimirFicha() {
+            window.print();
+        }
+
+        function voltarAoInicio() {
+            window.location.href = "../index.html";
+        }
+
+        function enviarViaWhatsApp() {
+            const nome = document.getElementById("trabalhador-nome").value;
+            const funcao = document.getElementById("trabalhador-funcao").value;
+            const setor = document.getElementById("trabalhador-setor").value;
+            const data = document.getElementById("entrega-data").value;
+
+            if (!nome || !funcao || !setor || !data) {
+                alert("Preencha todos os campos!");
+                return;
+            }
+
+            const epis = carrinho.map(e => `• ${e.nome} (${e.quantidade}x)`).join("\n");
+            const total = calcularTotalCarrinho();
+
+            const mensagem = `
+📋 *FICHA DE ENTREGA DE EPIs*
+
+👤 Trabalhador: ${nome}
+💼 Função: ${funcao}
+🏢 Setor: ${setor}
+📅 Data: ${new Date(data).toLocaleDateString("pt-BR")}
+
+🛡️ *EPIs a Entregar:*
+${epis}
+
+💰 *Total: ${formatarPreco(total)}*
+
+Confirmação de entrega educacional simulada.
+            `;
+
+            const url = `https://wa.me/${WHATS_NUMBER}?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, "_blank");
+        }
+
+        // Carregar ao abrir página
+        document.addEventListener("DOMContentLoaded", () => {
+            carregarCarrinho();
+            carregarResumo();
+        });
+    </script>
+
+</body>
+
+</html>

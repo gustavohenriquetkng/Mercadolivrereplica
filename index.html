@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecomerce - EPIs</title>
+    <link rel="icon" type="image/png" href="./fav.ico/image copy.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="menu-icon" id="menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <aside class="sidebar" id="sidebar">
+                <ul>
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#produtos">Produtos</a></li>
+                    <li><a href="#categorias">Categorias</a></li>
+                    <li><a href="#normas">Normas Regulamentadoras</a></li>
+                    <li><a href="#sobre">Sobre Nós</a></li>
+                    <li><a href="#andress">Endereço</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="pages/admin.html">Painel Admin</a></li>
+                </ul>
+            </aside>
+
+            <div class="search-container">
+                <input type="text" placeholder="Buscar EPIs..." class="search-input">
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+            <div class="cart-icon" onclick="irParaCarrinho()">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- SEÇÃO HERO/INÍCIO -->
+    <section class="hero" id="inicio">
+        <h1>PREVTECH</h1>
+        <h1>Equipamentos de Proteção Individual</h1>
+        <p>Segurança, Qualidade e Conhecimento para Profissionais</p>
+        <div class="hero-buttons">
+            <button class="btn-primary" onclick="document.getElementById('produtos').scrollIntoView({behavior: 'smooth'})">
+                Explorar EPIs
+            </button>
+            <button class="btn-secondary" onclick="document.getElementById('normas').scrollIntoView({behavior: 'smooth'})">
+                Conhecer as Normas
+            </button>
+        </div>
+    </section>
+
+    <!-- SEÇÃO PRODUTOS -->
+    <section class="main" id="produtos">
+        <div class="container">
+            <h2 class="section-title">Catálogo de EPIs</h2>
+
+            <!-- Filtro de Categorias -->
+            <div class="category-filter" id="category-filter"></div>
+
+            <!-- Grid de Produtos -->
+            <div class="products-grid" id="products-grid"></div>
+        </div>
+    </section>
+
+    <!-- MODAL DE DETALHES -->
+    <div class="modal" id="epi-modal"></div>
+
+    <!-- SEÇÃO CATEGORIAS -->
+    <section class="main" id="categorias">
+        <div class="container">
+            <h2 class="section-title">Categorias de Proteção</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 16px; color: #666;">
+                Os EPIs são organizados por tipo de risco ocupacional. Cada categoria protege uma parte específica do corpo contra um tipo particular de perigo.
+            </p>
+            <div class="products-grid" id="categorias-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="norma-card">
+                    <h3 class="norma-title">👷 Proteção da Cabeça</h3>
+                    <p class="norma-content">Capacetes e protetores contra impactos, quedas de objetos e riscos elétricos.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">👂 Proteção Auditiva</h3>
+                    <p class="norma-content">Protetores auriculares para ambientes com ruído acima de 85dB.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">👁️ Proteção Visual</h3>
+                    <p class="norma-content">Óculos de segurança contra partículas, radiação e respingos químicos.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">🫁 Proteção Respiratória</h3>
+                    <p class="norma-content">Máscaras e respiradores para proteção contra gases, vapores e partículas.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">🧤 Proteção das Mãos</h3>
+                    <p class="norma-content">Luvas especializadas contra cortes, queimaduras, produtos químicos e impactos.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">👢 Proteção dos Pés</h3>
+                    <p class="norma-content">Botas e sapatos de segurança contra impactos, perfurações e escorregões.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">⛓️ Proteção contra Quedas</h3>
+                    <p class="norma-content">Cinturões, arneses e cordas de segurança para trabalhos em altura.</p>
+                </div>
+                <div class="norma-card">
+                    <h3 class="norma-title">🦺 Proteção Corporal</h3>
+                    <p class="norma-content">Aventais, coletes refletores e roupas especiais de proteção.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO NORMAS REGULAMENTADORAS -->
+    <section class="normas" id="normas">
+        <div class="container">
+            <h2 class="section-title">Normas Regulamentadoras</h2>
+            <p style="text-align: center; margin-bottom: 40px; font-size: 16px; color: #666; max-width: 800px; margin-left: auto; margin-right: auto;">
+                As Normas Regulamentadoras (NRs) são diretrizes obrigatórias que estabelecem os requisitos para segurança e saúde no trabalho. Conheça as principais normas relacionadas aos EPIs.
+            </p>
+            <div class="normas-grid" id="normas-grid"></div>
+        </div>
+    </section>
+
+    <!--sobre nós-->
+    <section id="sobre">
+        <div class="text">
+            <h2>Sobre Nós</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 16px; color: #666;">
+                Sobre a PrevTech
+
+Fundada em novembro de 2025, a PrevTech é uma empresa especializada em Equipamentos de Proteção Individual (EPIs) e serviços de consultoria e treinamentos em segurança do trabalho. Nosso objetivo é garantir a proteção, a saúde e a conformidade legal dos trabalhadores, oferecendo produtos certificados, com CA válido, e capacitações realizadas por profissionais qualificados.
+
+Contamos com ampla variedade de EPIs, logística própria para entregas regionais e atendimento personalizado para empresas de pequeno, médio e grande porte. Atuamos de forma integrada, unindo tecnologia, conhecimento técnico e compromisso com a segurança.
+
+Nossa sede está localizada no Teófilo Otoni Shopping, Avenida Alfredo Sá, 2225, Jardim das Acácias, Teófilo Otoni – MG, com atendimento em toda a região do Vale do Mucuri e Vale do Jequitinhonha.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ENDEREÇO DA PLATAFORMA -->
+    <section id="andress" class="loja-fisica">
+    <div class="container">
+        <h2 class="section-title">📍 Nossa Loja Física</h2>
+        
+        <div class="carrossel">
+
+    <button class="btn prev">&#10094;</button>
+
+    <div class="slides">
+        <img src="img/loja1.jpeg" class="slide active">
+        <img src="img/loja2.jpeg" class="slide">
+        <img src="img/loja4.jpeg" class="slide">
+    </div>
+
+    <button class="btn next">&#10095;</button>
+
+</div>
+
+
+        <div class="lojas-grid">
+
+            <!-- LOJA 1 -->
+            <div class="loja-card">
+                <h3>Unidade Centro</h3>
+
+                <p class="loja-info">
+                    📌 Av. Alfredo Sá, 2225,<br>
+                    Jardim das Acácias/ MG
+                </p>
+
+                <p class="loja-info">
+                    📞 (33) 99951-6082
+                </p>
+
+                <p class="loja-info">
+                    🕒 Segunda a Sexta: 08h às 18h <br>
+                    🕒 Sábado: 08h às 12h
+                </p>
+
+                <a href="https://maps.app.goo.gl/hhcY3wXQsBTN1mFt8" target="_blank" class="btn-mapa">
+                    Ver no Google Maps
+                </a>
+            </div>
+
+            <!-- DUPLICAR CARD PARA NOVAS LOJAS -->
+
+        </div>
+    </div>
+</section>
+
+    <!-- SEÇÃO CONTATO -->
+    <section class="contato" id="contato">
+        <div class="container">
+            <h2>Contato Educacional</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 16px; color: #666;">
+                Dúvidas sobre EPIs ou a plataforma? Entre em contato conosco!
+            </p>
+
+            <form class="form-contato" onsubmit="enviarFormularioContato(event)">
+                <input type="text" placeholder="Seu Nome" required>
+                <input type="email" placeholder="Seu Email" required>
+                <textarea placeholder="Sua Mensagem" rows="5" required></textarea>
+                <button type="submit">Enviar Mensagem</button>
+            </form>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <p style="font-size: 16px; margin-bottom: 15px;">
+                    <strong>Redes Sociais do Curso:</strong>
+                </p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <a href="#" style="color: #FFD700; font-size: 24px;"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" style="color: #FFD700; font-size: 24px;"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" style="color: #FFD700; font-size: 24px;"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" style="color: #FFD700; font-size: 24px;"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="copyright">
+        © 2026 Gustavo Henrique Rodrigues  — Todos os direitos reservados. | Desenvolvido para o Curso Técnico em Segurança do Trabalho
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="scripts.js"></script>
+    <script>
+        function irParaCarrinho() {
+            alert("Funcionalidade de carrinho em desenvolvimento. Você tem " + carrinho.length + " item(ns) no carrinho.");
+        }
+
+        function enviarFormularioContato(event) {
+            event.preventDefault();
+            mostrarNotificacao("Mensagem enviada com sucesso! Entraremos em contato em breve.");
+            event.target.reset();
+        }
+    </script>
+
+</body>
+
+</html>
